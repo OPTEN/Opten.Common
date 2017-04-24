@@ -1,0 +1,22 @@
+﻿<?xml version="1.0"?>
+<package>
+	<metadata>
+		<id>Opten.Common</id>
+		<version></version>
+		<title>Opten.Common</title>
+		<authors>OPTEN AG</authors>
+		<owners>OPTEN AG</owners>
+		<projectUrl>https://bitbucket.org/opten/opten-solutions</projectUrl>
+		<description><![CDATA[OPTEN Common Library]]></description>
+		<iconUrl>http://www.opten.ch/nuget/logo.png</iconUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<releaseNotes></releaseNotes>
+		<tags>opten</tags>
+		<dependencies></dependencies>
+	</metadata>
+	<files>
+		<file src="src\Opten.Common\bin\Release\Opten.Common.dll" target="lib\net45" />
+		<file src="src\Opten.Common\bin\Release\Opten.Common.pdb" target="lib\net45" />
+		<file src="src\Opten.Common\bin\Release\Opten.Common.xml" target="lib\net45" />
+	</files>
+</package>
