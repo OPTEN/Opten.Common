@@ -36,7 +36,7 @@ Task("Version")
 		CreateDirectory(dest);
 	}
 
-	version = "1.1.6.2"; //GetNextNuGetVersion("Opten.Common", feedUrl);
+	version = "1.1.6.3"; //GetNextNuGetVersion("Opten.Common", feedUrl);
 
 	PatchAssemblyInfo("../src/Opten.Common/Properties/AssemblyInfo.cs", version);
 	FileWriteText(dest + File("Opten.Common.variables.txt"), "version=" + version);
@@ -52,8 +52,6 @@ Task("Restore-NuGet-Packages")
 		NoCache = true
 	});
 });
-
-// Building
 
 Task("Build") 
 	.IsDependentOn("Restore-NuGet-Packages") 
@@ -114,7 +112,6 @@ Task("Docs")
 	}
 });
 
-
 // Deploying
 
 Task("Deploy")
@@ -126,7 +123,7 @@ Task("Deploy")
 	// Get the Version from the .txt file
 	string version = EnvironmentVariable("bamboo_inject_" + packageId.Replace(".", "_") + "_version");
 
-	if(string.IsNullOrWhiteSpace(version))
+	if (string.IsNullOrWhiteSpace(version))
 	{
 		throw new Exception("Version is missing for " + packageId + ".");
 	}

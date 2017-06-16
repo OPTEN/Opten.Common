@@ -35,7 +35,7 @@ namespace Opten.Common.Ip
 				return httpContext.Request.ServerVariables["REMOTE_ADDR"];
 			}
 
-			return "IP Address Not Known";
+			return "IP Address not known";
 		}
 
 		/// <summary>

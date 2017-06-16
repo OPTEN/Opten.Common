@@ -3,10 +3,11 @@
 namespace Opten.Common.Extensions
 {
 	/// <summary>
-	/// The guid extensions.
+	/// The Guid Extensions.
 	/// </summary>
 	public static class GuidExtensions
 	{
+
 		/// <summary>
 		/// Determines whether [is null or empty].
 		/// </summary>
@@ -18,5 +19,6 @@ namespace Opten.Common.Extensions
 		{
 			return guid == null || guid.Equals(Guid.Empty);
 		}
+
 	}
 }

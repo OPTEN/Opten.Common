@@ -157,8 +157,7 @@ namespace Opten.Common.Extensions
 
 			return source.Any(o => o.HasValues());
 		}
-
-
+		
 		/// <summary>
 		/// Determines whether [is null or empty].
 		/// </summary>
@@ -171,5 +170,6 @@ namespace Opten.Common.Extensions
 		{
 			return source == null || source.Any() == false;
 		}
+
 	}
 }
