@@ -348,6 +348,34 @@ namespace Opten.Common.Helpers
 
 		#endregion
 
+		#region Time
+
+		/// <summary>
+		/// Displays the time in Swiss-Format (hh:mm[:ss]).
+		/// </summary>
+		/// <param name="time">The time.</param>
+		/// <param name="ignoreSeconds">if set to <c>true</c> [ignore seconds].</param>
+		/// <returns></returns>
+		public static string AsTime(this TimeSpan? time, bool ignoreSeconds = true)
+		{
+			if (time.HasValue == false) return null;
+
+			return time.Value.AsTime();
+		}
+
+		/// <summary>
+		/// Displays the time in Swiss-Format (hh:mm[:ss]).
+		/// </summary>
+		/// <param name="time">The time.</param>
+		/// <param name="ignoreSeconds">if set to <c>true</c> [ignore seconds].</param>
+		/// <returns></returns>
+		public static string AsTime(this TimeSpan time, bool ignoreSeconds = true)
+		{
+			return time.ToString($@"hh\:mm{(ignoreSeconds ? string.Empty : @"\:ss")}");
+		}
+
+		#endregion
+
 		#region Number
 
 		/// <summary>

@@ -53,8 +53,6 @@ Task("Restore-NuGet-Packages")
 	});
 });
 
-// Building
-
 Task("Build") 
 	.IsDependentOn("Restore-NuGet-Packages") 
 	.Does(() =>
@@ -114,7 +112,6 @@ Task("Docs")
 	}
 });
 
-
 // Deploying
 
 Task("Deploy")
@@ -126,7 +123,7 @@ Task("Deploy")
 	// Get the Version from the .txt file
 	string version = EnvironmentVariable("bamboo_inject_" + packageId.Replace(".", "_") + "_version");
 
-	if(string.IsNullOrWhiteSpace(version))
+	if (string.IsNullOrWhiteSpace(version))
 	{
 		throw new Exception("Version is missing for " + packageId + ".");
 	}

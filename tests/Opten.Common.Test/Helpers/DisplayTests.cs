@@ -46,7 +46,7 @@ namespace Opten.Common.Test.Helpers
 		}
 
 		[Test]
-		public void SwissDate()
+		public void AsSwissDate()
 		{
 			DateTime dt = new DateTime(2015, 01, 25, 22, 10, 20);
 			DateTime? dtNullable = (DateTime?)dt;
@@ -71,8 +71,19 @@ namespace Opten.Common.Test.Helpers
 			Assert.That("25.01", Is.EqualTo(dtNullable.AsSwissDateShort()));
 			Assert.That("2015-01-25", Is.EqualTo(dtNullable.AsUrl()));
 			Assert.That("25.01.1992", Is.EqualTo(birthdayNullable.AsSwissBirthday()));
-			Assert.That("25.01.1992 (25)", Is.EqualTo(birthdayNullable.AsSwissBirthday(showAge: true)));
+			Assert.That($"25.01.1992 ({birthday.GetAge()})", Is.EqualTo(birthdayNullable.AsSwissBirthday(showAge: true)));
 			Assert.That(null, Is.EqualTo(dtNull.AsSwissDate()));
+		}
+
+		[Test]
+		public void AsTime()
+		{
+			TimeSpan ts = new TimeSpan(22, 00, 11);
+			TimeSpan? tsNull = null;
+			
+			Assert.That("22:00", Is.EqualTo(ts.AsTime()));
+			Assert.That("22:00:11", Is.EqualTo(ts.AsTime(ignoreSeconds: false)));
+			Assert.That(null, Is.EqualTo(tsNull.AsTime()));
 		}
 
 	}
