@@ -23,16 +23,30 @@ namespace Opten.Common.Ip
 			{
 				string ipAddress = httpContext.Request.ServerVariables["HTTP_X_FORWARDED_FOR"];
 
-				if (string.IsNullOrEmpty(ipAddress) == false)
+				if (string.IsNullOrWhiteSpace(ipAddress))
 				{
-					string[] addresses = ipAddress.Split(',');
-					if (addresses.Length != 0)
-					{
-						return addresses[0];
-					}
+					ipAddress = httpContext.Request.ServerVariables["HTTP_CLIENT_IP"];
 				}
 
-				return httpContext.Request.ServerVariables["REMOTE_ADDR"];
+				if (string.IsNullOrWhiteSpace(ipAddress))
+				{
+					ipAddress = httpContext.Request.UserHostAddress;
+				}
+
+				if (string.IsNullOrWhiteSpace(ipAddress))
+				{
+					ipAddress = httpContext.Request.ServerVariables["REMOTE_ADDR"];
+				}
+
+				if (string.IsNullOrWhiteSpace(ipAddress) == false)
+				{
+					/*if (ipAddress.Contains(','))
+					{
+						return ipAddress.Split(',').First();
+					}*/
+
+					return ipAddress;
+				}
 			}
 
 			return "IP Address not known";
@@ -135,7 +149,7 @@ namespace Opten.Common.Ip
 
 			return false;
 		}
-		
+
 		/// <summary>
 		/// Determines whether [is IP Address in range] [the specified lower and upper IP Address].
 		/// </summary>

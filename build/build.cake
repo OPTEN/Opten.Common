@@ -36,7 +36,7 @@ Task("Version")
 		CreateDirectory(dest);
 	}
 
-	version = "1.1.6.3"; //GetNextNuGetVersion("Opten.Common", feedUrl);
+	version = "1.1.6.4"; //GetNextNuGetVersion("Opten.Common", feedUrl);
 
 	PatchAssemblyInfo("../src/Opten.Common/Properties/AssemblyInfo.cs", version);
 	FileWriteText(dest + File("Opten.Common.variables.txt"), "version=" + version);
