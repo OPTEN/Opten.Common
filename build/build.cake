@@ -80,9 +80,13 @@ Task("Run-Unit-Tests")
 
 	//TODO: Why not csproj?
 	NUnit3("../tests/Opten.Common.Test/bin/Release/Opten.Common.Test.dll", new NUnit3Settings {
-		Results = results + File("Opten.Common.Test.xml"),
-		Configuration = "Release",
-		ResultFormat = "nunit2" // Wait until Bamboo 5.14 is out to support NUnit 3!
+		Results = new[] {
+			new NUnit3Result {
+				FileName = results + File("Opten.Common.Test.xml"),
+				Format = "nunit2" // Wait until Bamboo 5.14 is out to support NUnit 3!
+			}
+		},
+		Configuration = "Release"
 	});
 });
 
