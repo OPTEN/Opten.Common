@@ -26,46 +26,29 @@ namespace Opten.Common.Extensions
 		}
 
 		/// <summary>
-		/// Determines whether the url contains m. (e.g. m.opten.ch)
-		/// </summary>
-		/// <param name="uri">The URI.</param>
-		/// <returns></returns>
-		public static bool IsMobile(this Uri uri)
-		{
-			return uri.AbsoluteUri.IndexOf("://m.") >= 0;
-		}
-
-		/// <summary>
-		/// Determines whether the url contains staging.|stg. or m.staging.|m.stg. (e.g. stg.opten.ch)
-		/// </summary>
-		/// <param name="uri">The URI.</param>
-		/// <returns></returns>
-		public static bool IsStaging(this Uri uri)
-		{
-			return uri.AbsoluteUri.IndexOf("://staging.") >= 0 || uri.AbsoluteUri.IndexOf("://stg.") >= 0 ||
-				   uri.AbsoluteUri.IndexOf("://m.staging.") >= 0 || uri.AbsoluteUri.IndexOf("://m.stg.") >= 0;
-		}
-
-		/// <summary>
-		/// Gets the URL (http://www.opten.ch?queryParams... > http://wwww.opten.ch?queryParams..).
+		/// Gets the URL (http://www.opten.ch?queryParams... &gt; http://wwww.opten.ch?queryParams..).
 		/// </summary>
 		/// <param name="uri">The URI.</param>
 		/// <param name="withQuery">if set to <c>true</c> [with query].</param>
 		/// <param name="withDomain">if set to <c>true</c> [with domain].</param>
+		/// <param name="withFragment">if set to <c>true</c> [with fragment].</param>
 		/// <returns></returns>
-		public static string GetUrl(this Uri uri, bool withQuery = true, bool withDomain = true)
+		public static string GetUrl(this Uri uri, bool withQuery = true, bool withDomain = true, bool withFragment = true)
 		{
-			if (uri.IsAbsoluteUri == false)
+			string url = uri.GetPath();
+			string pathAndQuery = uri.GetPathAndQuery();
+
+			if (withQuery && string.IsNullOrWhiteSpace(pathAndQuery) == false)
 			{
-				return string.Empty;
+				url = HttpUtility.UrlDecode(pathAndQuery, Encoding.UTF8);
 			}
 
-			string url = uri.AbsolutePath;
+			if (withFragment)
+			{
+				url += uri.GetFragment();
+			}
 
-			if (withQuery && string.IsNullOrWhiteSpace(uri.PathAndQuery) == false)
-				url = HttpUtility.UrlDecode(uri.PathAndQuery, Encoding.UTF8);
-
-			return ((withDomain) ? uri.GetBaseUrl() : string.Empty) + url;
+			return ((withDomain && uri.IsAbsoluteUri) ? uri.GetBaseUrl() : string.Empty) + url;
 		}
 
 		/// <summary>
@@ -99,9 +82,6 @@ namespace Opten.Common.Extensions
 		/// <exception cref="System.ArgumentNullException">uri, param or value;Some required arguments are missing!</exception>
 		public static Uri AddQueryParam(this Uri uri, string param, object value, bool overrideParam = false)
 		{
-			if (uri == null || string.IsNullOrWhiteSpace(param) || value == null)
-				throw new ArgumentNullException("uri, param or value", "Some required arguments are missing!");
-
 			if (overrideParam)
 			{
 				return uri.UpdateQueryParam(param: param, value: value);
@@ -111,7 +91,8 @@ namespace Opten.Common.Extensions
 
 			if (uri.GetQueryCollection().ContainsKey(param)) return uri;
 
-			string url = uri.GetUrl(withQuery: true, withDomain: true);
+			string url = uri.GetUrl(withQuery: true, withDomain: true, withFragment: false);
+			string fragment = uri.GetFragment();
 
 			string prefix = "?";
 			if (url.Contains("?")) prefix = "&";
@@ -119,7 +100,9 @@ namespace Opten.Common.Extensions
 			string stringValue = value.ToString().Trim();
 			if (value.GetType() == typeof(bool)) stringValue = stringValue.ToLowerInvariant();
 
-			return new Uri(url + prefix + param + "=" + stringValue, UriKind.Absolute);
+			return new Uri(url + prefix + param + "=" + stringValue + fragment, uri.IsAbsoluteUri
+				? UriKind.Absolute
+				: UriKind.Relative);
 		}
 
 		/// <summary>
@@ -130,8 +113,6 @@ namespace Opten.Common.Extensions
 		/// <returns></returns>
 		public static Uri RemoveQueryParam(this Uri uri, string param)
 		{
-			string url = uri.GetUrl(withQuery: true, withDomain: true);
-
 			param = param.Trim();
 
 			NameValueCollection query = uri.GetQueryCollection();
@@ -140,11 +121,19 @@ namespace Opten.Common.Extensions
 
 			query.Remove(param);
 
-			url = uri.GetUrl(withQuery: false, withDomain: true);
+			string url = uri.GetUrl(withQuery: false, withDomain: true, withFragment: false);
+			string fragment = uri.GetFragment();
 
-			if (query.Count == 0) return new Uri(url, UriKind.Absolute);
+			if (query.Count == 0)
+			{
+				return new Uri(url + fragment, uri.IsAbsoluteUri
+					? UriKind.Absolute
+					: UriKind.Relative);
+			}
 
-			return new Uri(url + "?" + HttpUtility.UrlDecode(query.ToString(), Encoding.UTF8), UriKind.Absolute);
+			return new Uri(url + "?" + HttpUtility.UrlDecode(query.ToString(), Encoding.UTF8) + fragment, uri.IsAbsoluteUri
+				? UriKind.Absolute
+				: UriKind.Relative);
 		}
 
 		/// <summary>
@@ -157,9 +146,6 @@ namespace Opten.Common.Extensions
 		/// <exception cref="System.ArgumentNullException">uri, param or value;Some required arguments are missing!</exception>
 		public static Uri UpdateQueryParam(this Uri uri, string param, object value)
 		{
-			if (uri == null || string.IsNullOrWhiteSpace(param) || value == null)
-				throw new ArgumentNullException("uri, param or value", "Some required arguments are missing!");
-
 			return uri.RemoveQueryParam(param).AddQueryParam(param, value);
 		}
 
@@ -191,11 +177,17 @@ namespace Opten.Common.Extensions
 		/// <returns></returns>
 		public static NameValueCollection GetQueryCollection(this Uri uri)
 		{
-			if (string.IsNullOrWhiteSpace(uri.Query)) return null;
+			string query = uri.IsAbsoluteUri
+				? uri.Query
+				: uri.OriginalString.Contains('?')
+					? uri.OriginalString.Split('?')[1]
+					: null;
 
-			NameValueCollection query = HttpUtility.ParseQueryString(uri.Query);
+			query = query.ForceStartsWith('?');
 
-			return query;
+			if (string.IsNullOrWhiteSpace(query)) return null;
+
+			return HttpUtility.ParseQueryString(query);
 		}
 
 		/// <summary>
@@ -254,18 +246,49 @@ namespace Opten.Common.Extensions
 
 		#region Private helpers
 
-		/*private static string ToQueryString(this Dictionary<string, string> query)
+		private static string GetPath(this Uri uri)
 		{
-			string queryString = "?";
-
-			foreach (KeyValuePair<string, string> param in query)
+			if (uri.IsAbsoluteUri)
 			{
-				if (queryString.Length > 1) queryString += "&";
-				queryString += param.Key + "=" + param.Value;
+				return uri.AbsolutePath;
 			}
 
-			return queryString;
-		}*/
+			string url = uri.OriginalString;
+
+			url = url.Contains("#")
+				? url.Split('#')[0]
+				: url;
+
+			return url.Contains("?")
+				? url.Split('?')[0]
+				: url;
+		}
+
+		private static string GetPathAndQuery(this Uri uri)
+		{
+			if (uri.IsAbsoluteUri)
+			{
+				return uri.PathAndQuery;
+			}
+
+			return uri.OriginalString.Contains("#")
+				? uri.OriginalString.Split('#')[0]
+				: uri.OriginalString;
+		}
+
+		private static string GetFragment(this Uri uri)
+		{
+			if (uri.IsAbsoluteUri)
+			{
+				return string.IsNullOrWhiteSpace(uri.Fragment)
+					? string.Empty
+					: uri.Fragment.ForceStartsWith('#');
+			}
+
+			return uri.OriginalString.Contains("#")
+				? uri.OriginalString.Split('#')[1].ForceStartsWith('#')
+				: string.Empty;
+		}
 
 		#endregion
 
