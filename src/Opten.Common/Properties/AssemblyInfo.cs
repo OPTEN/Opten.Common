@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("OPTEN AG")]
 [assembly: AssemblyProduct("Opten.Common")]
-[assembly: AssemblyCopyright("Copyright (c) 2015 - 2017 OPTEN AG")]
+[assembly: AssemblyCopyright("Copyright (c) 2015 - 2018 OPTEN AG")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
