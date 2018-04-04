@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -57,6 +58,28 @@ namespace Opten.Common.Extensions
 			if (string.IsNullOrWhiteSpace(input)) return string.Empty;
 
 			return char.ToLowerInvariant(input[0]) + input.Substring(1);
+		}
+
+		/// <summary>
+		/// Forces the string to starts with a value.
+		/// </summary>
+		/// <param name="input">The input.</param>
+		/// <param name="value">The value.</param>
+		/// <returns></returns>
+		public static string ForceStartsWith(this string input, char value)
+		{
+			return input.StartsWith(value.ToString(CultureInfo.InvariantCulture)) ? input : value + input;
+		}
+
+		/// <summary>
+		/// Forces the string to ends with a value.
+		/// </summary>
+		/// <param name="input">The input.</param>
+		/// <param name="value">The value.</param>
+		/// <returns></returns>
+		public static string ForceEndsWith(this string input, char value)
+		{
+			return input.EndsWith(value.ToString(CultureInfo.InvariantCulture)) ? input : input + value;
 		}
 
 		/// <summary>
