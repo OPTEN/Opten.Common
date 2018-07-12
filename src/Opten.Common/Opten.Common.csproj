@@ -63,6 +63,7 @@
     <Compile Include="Extensions\PaginationExtensions.cs" />
     <Compile Include="Extensions\RequestExtensions.cs" />
     <Compile Include="Extensions\SessionExtensions.cs" />
+    <Compile Include="Extensions\StreamExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Extensions\UriExtensions.cs" />
