@@ -102,6 +102,14 @@ namespace Opten.Common.Test.Extensions
 			Assert.AreEqual(new string[] { "1", "2", string.Empty, "4" }, "1,2,,4".ConvertCommaSeparatedToStringArray(stringSplitOptions: StringSplitOptions.None));
 		}
 
+		[Test]
+		public void Remove_Non_Printig_Chars()
+		{
+			Assert.AreEqual("Nachwuchsförderung", "Nachwuchs&shy;förderung".RemoveNonPrintigChars());
+			Assert.AreEqual("TestTest", "Test&nbsp;Test".RemoveNonPrintigChars());
+			Assert.AreEqual("Test & Test", "Test & Test".RemoveNonPrintigChars());
+		}
+
 		private class TestClass
 		{
 			public int Integer { get; set; }
