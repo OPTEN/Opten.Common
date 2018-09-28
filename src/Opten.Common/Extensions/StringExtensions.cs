@@ -249,18 +249,17 @@ namespace Opten.Common.Extensions
 
 		/// <summary>
 		/// Removes for example &shy; or &nbsp;
-		/// (everything between `&` and `;`)
 		/// </summary>
 		/// <param name="value"></param>
 		/// <returns></returns>
-		public static string RemoveNonPrintigChars(this string value)
+		public static string RemoveNonPrintingChars(this string value)
 		{
 			if (string.IsNullOrWhiteSpace(value))
 			{
 				return string.Empty;
 			}
 
-			return Regex.Replace(value, "@&[a-z]+;", string.Empty);
+			return Regex.Replace(value, @"&[a-z]+;", string.Empty);
 		}
 
 	}

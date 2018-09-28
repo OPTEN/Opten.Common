@@ -52,11 +52,11 @@ namespace Opten.Common.Test.Extensions
 		}
 
 		[Test]
-		public void Remove_Non_Printig_Chars()
+		public void Remove_Non_Printing_Chars()
 		{
-			Assert.AreEqual("Nachwuchsförderung", "Nachwuchs&shy;förderung".RemoveNonPrintigChars());
-			Assert.AreEqual("TestTest", "Test&nbsp;Test".RemoveNonPrintigChars());
-			Assert.AreEqual("Test & Test", "Test & Test".RemoveNonPrintigChars());
+			Assert.AreEqual("Nachwuchsförderung", "Nachwuchs&shy;förderung".RemoveNonPrintingChars());
+			Assert.AreEqual("TestTest", "Test&nbsp;Test".RemoveNonPrintingChars());
+			Assert.AreEqual("Test & Test", "Test & Test".RemoveNonPrintingChars());
 		}
 
 		private class TestClass
