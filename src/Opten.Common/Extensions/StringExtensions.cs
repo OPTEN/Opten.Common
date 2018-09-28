@@ -60,6 +60,44 @@ namespace Opten.Common.Extensions
 		}
 
 		/// <summary>
+		/// Trims the end.
+		/// </summary>
+		/// <param name="value">The value.</param>
+		/// <param name="forRemoving">For removing.</param>
+		/// <returns></returns>
+		public static string TrimEnd(this string value, string forRemoving)
+		{
+			if (string.IsNullOrWhiteSpace(value)) return value;
+			if (string.IsNullOrWhiteSpace(forRemoving)) return value;
+
+			while (value.EndsWith(forRemoving, StringComparison.InvariantCultureIgnoreCase))
+			{
+				value = value.Remove(value.LastIndexOf(forRemoving, StringComparison.InvariantCultureIgnoreCase));
+			}
+
+			return value;
+		}
+
+		/// <summary>
+		/// Trims the start.
+		/// </summary>
+		/// <param name="value">The value.</param>
+		/// <param name="forRemoving">For removing.</param>
+		/// <returns></returns>
+		public static string TrimStart(this string value, string forRemoving)
+		{
+			if (string.IsNullOrWhiteSpace(value)) return value;
+			if (string.IsNullOrWhiteSpace(forRemoving)) return value;
+
+			while (value.StartsWith(forRemoving, StringComparison.InvariantCultureIgnoreCase))
+			{
+				value = value.Substring(forRemoving.Length);
+			}
+			
+			return value;
+		}
+
+		/// <summary>
 		/// Forces the string to starts with a value.
 		/// </summary>
 		/// <param name="input">The input.</param>
