@@ -247,5 +247,21 @@ namespace Opten.Common.Extensions
 			return Regex.Replace(input, "[^0-9a-zA-Z]+", replacement);
 		}
 
+		/// <summary>
+		/// Removes for example &shy; or &nbsp;
+		/// (everything between `&` and `;`)
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public static string RemoveNonPrintigChars(this string value)
+		{
+			if (string.IsNullOrWhiteSpace(value))
+			{
+				return string.Empty;
+			}
+
+			return Regex.Replace(value, "@&[a-z]+;", string.Empty);
+		}
+
 	}
 }
