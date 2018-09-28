@@ -248,9 +248,9 @@ namespace Opten.Common.Extensions
 		}
 
 		/// <summary>
-		/// Removes for example &shy; or &nbsp;
+		/// Removes the non printing chars like shy or nbsp.
 		/// </summary>
-		/// <param name="value"></param>
+		/// <param name="value">The value.</param>
 		/// <returns></returns>
 		public static string RemoveNonPrintingChars(this string value)
 		{
