@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
-using System.Reflection;
 using System.Text.RegularExpressions;
 
 namespace Opten.Common.Extensions
@@ -212,30 +211,6 @@ namespace Opten.Common.Extensions
 		}
 
 		/// <summary>
-		/// Trims all string properties of the object.
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="objectToTrim">The object to trim.</param>
-		/// <returns></returns>
-		/// <exception cref="System.ArgumentNullException">objectToTrim</exception>
-		public static T TrimAllStringProperties<T>(this T objectToTrim)
-		{
-			if (objectToTrim == null)
-				throw new ArgumentNullException("objectToTrim");
-
-			foreach (PropertyInfo stringProperty in objectToTrim.GetType().GetReadAndWriteablePropertiesOfType<string>())
-			{
-				string currentValue = stringProperty.GetValue(objectToTrim) as string;
-
-				if (currentValue == null) continue;
-
-				stringProperty.SetValue(objectToTrim, currentValue.NullCheckTrim(), null);
-			}
-
-			return objectToTrim;
-		}
-
-		/// <summary>
 		/// Determines whether the string [is digits only].
 		/// </summary>
 		/// <param name="input">The input.</param>
@@ -271,5 +246,6 @@ namespace Opten.Common.Extensions
 
 			return Regex.Replace(input, "[^0-9a-zA-Z]+", replacement);
 		}
+
 	}
 }
