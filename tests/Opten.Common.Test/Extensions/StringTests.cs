@@ -29,57 +29,6 @@ namespace Opten.Common.Test.Extensions
 		}
 
 		[Test]
-		public void Trim_All_String_Properties()
-		{
-			TestClass testClass = new TestClass
-			{
-				Integer = 1000,
-				lowerCasePropertyName = " test ",
-				UpperCasePropertyName = null
-			};
-
-			testClass = testClass.TrimAllStringProperties();
-
-			Assert.AreEqual(1000, testClass.Integer);
-			Assert.That(testClass.lowerCasePropertyName, Is.EqualTo("test"));
-			Assert.That(testClass.UpperCasePropertyName, Is.Null);
-		}
-
-		[Test]
-		public void Trim_All_String_Properties_With_WhiteSpace_Values()
-		{
-			TestClass testClass = new TestClass
-			{
-				Integer = 1000,
-				lowerCasePropertyName = "  ",
-				UpperCasePropertyName = "  "
-			};
-
-			testClass = testClass.TrimAllStringProperties();
-
-			Assert.AreEqual(1000, testClass.Integer);
-			Assert.AreEqual(string.Empty, testClass.lowerCasePropertyName);
-			Assert.AreEqual(string.Empty, testClass.UpperCasePropertyName);
-		}
-
-		[Test]
-		public void Trim_All_String_Properties_With_Null_Values()
-		{
-			TestClass testClass = new TestClass
-			{
-				Integer = 1000,
-				lowerCasePropertyName = null,
-				UpperCasePropertyName = null
-			};
-
-			testClass = testClass.TrimAllStringProperties();
-
-			Assert.AreEqual(1000, testClass.Integer);
-			Assert.AreEqual(null, testClass.lowerCasePropertyName);
-			Assert.AreEqual(null, testClass.UpperCasePropertyName);
-		}
-
-		[Test]
 		public void Is_Descending()
 		{
 			string nullString = null;
@@ -100,6 +49,14 @@ namespace Opten.Common.Test.Extensions
 
 			Assert.AreEqual(new string[] { "1", "2", "3", "4" }, "1,2,3,4".ConvertCommaSeparatedToStringArray(stringSplitOptions: StringSplitOptions.None));
 			Assert.AreEqual(new string[] { "1", "2", string.Empty, "4" }, "1,2,,4".ConvertCommaSeparatedToStringArray(stringSplitOptions: StringSplitOptions.None));
+		}
+
+		[Test]
+		public void Remove_Non_Printing_Chars()
+		{
+			Assert.AreEqual("Nachwuchsförderung", "Nachwuchs&shy;förderung".RemoveNonPrintingChars());
+			Assert.AreEqual("TestTest", "Test&nbsp;Test".RemoveNonPrintingChars());
+			Assert.AreEqual("Test & Test", "Test & Test".RemoveNonPrintingChars());
 		}
 
 		private class TestClass

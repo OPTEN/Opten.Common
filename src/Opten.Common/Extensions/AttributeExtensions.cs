@@ -1,80 +1,50 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace Opten.Common.Extensions
 {
-	/// <summary>
-	/// The Attribute Extensions.
-	/// </summary>
+#pragma warning disable CS1591
+
 	public static class AttributeExtensions
 	{
 
-		/// <summary>
-		/// Gets the custom attributes.
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="provider">The provider.</param>
-		/// <returns></returns>
-		public static T[] GetCustomAttributes<T>(this ICustomAttributeProvider provider) where T : Attribute
+		public static TAttribute FirstAttribute<TAttribute>(this Type type)
 		{
-			return provider.GetCustomAttributes<T>(true);
+			return type.FirstAttribute<TAttribute>(true);
 		}
 
-		/// <summary>
-		/// Gets the custom attributes.
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="provider">The provider.</param>
-		/// <param name="inherit">if set to <c>true</c> [inherit].</param>
-		/// <returns></returns>
-		/// <exception cref="System.ArgumentNullException">provider</exception>
-		public static T[] GetCustomAttributes<T>(this ICustomAttributeProvider provider, bool inherit) where T : Attribute
+		public static TAttribute FirstAttribute<TAttribute>(this Type type, bool inherit)
 		{
-			if (provider == null) throw new ArgumentNullException("provider");
-
-			T[] array = provider.GetCustomAttributes(typeof(T), inherit) as T[];
-
-			if (array == null)
-			{
-				return new T[0];
-			}
-
-			return array;
+			object[] attrs = type.GetCustomAttributes(typeof(TAttribute), inherit);
+			return (TAttribute)(attrs.Length > 0 ? attrs[0] : null);
 		}
 
-		/// <summary>
-		/// Gets the single attribute.
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="provider">The provider.</param>
-		/// <returns></returns>
-		/// <exception cref="System.ArgumentNullException">memberInfo</exception>
-		public static T GetSingleAttribute<T>(this ICustomAttributeProvider provider) where T : Attribute
+		public static TAttribute FirstAttribute<TAttribute>(this PropertyInfo propertyInfo)
 		{
-			if (provider == null) throw new ArgumentNullException("provider");
-
-			object[] customAttributes = provider.GetCustomAttributes(typeof(T), false);
-
-			if (customAttributes.Length > 0)
-			{
-				return (T)((object)customAttributes[0]);
-			}
-
-			return default(T);
+			return propertyInfo.FirstAttribute<TAttribute>(true);
 		}
 
-		/// <summary>
-		/// Determines whether [has custom attribute].
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="provider">The provider.</param>
-		/// <returns></returns>
-		/// <exception cref="System.ArgumentNullException">memberInfo</exception>
-		public static bool HasCustomAttribute<T>(this ICustomAttributeProvider provider) where T : Attribute
+		public static TAttribute FirstAttribute<TAttribute>(this PropertyInfo propertyInfo, bool inherit)
 		{
-			if (provider == null) throw new ArgumentNullException("provider");
-
-			return provider.GetSingleAttribute<T>() != null;
+			var attrs = propertyInfo.GetCustomAttributes(typeof(TAttribute), inherit);
+			return (TAttribute)(attrs.Length > 0 ? attrs[0] : null);
 		}
+
+		public static TAttribute GetCustomAttribute<TAttribute>(this Type type, bool inherit) where TAttribute : Attribute
+		{
+			return type.GetCustomAttributes<TAttribute>(inherit).SingleOrDefault();
+		}
+
+		public static IEnumerable<TAttribute> GetCustomAttributes<TAttribute>(this Type type, bool inherited) where TAttribute : Attribute
+		{
+			if (type == null) return Enumerable.Empty<TAttribute>();
+			return type.GetCustomAttributes(typeof(TAttribute), inherited).OfType<TAttribute>();
+		}
+
 	}
+
+#pragma warning restore CS1591
+
 }
