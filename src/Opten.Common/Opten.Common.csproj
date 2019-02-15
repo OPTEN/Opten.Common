@@ -53,6 +53,7 @@
     <Compile Include="Comparers\SwissStringComparer.cs" />
     <Compile Include="Extensions\ArrayExtensions.cs" />
     <Compile Include="Extensions\AttributeExtensions.cs" />
+    <Compile Include="Extensions\CoordinatesExtensions.cs" />
     <Compile Include="Extensions\DecimalExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Extensions\ExpressionExtensions.cs" />
