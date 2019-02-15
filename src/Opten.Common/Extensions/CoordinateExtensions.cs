@@ -3,9 +3,9 @@
 namespace Opten.Common.Extensions
 {
     /// <summary>
-    /// The Coordinates Extensions.
+    /// The Coordinate Extensions.
     /// </summary>
-    public static class CoordinatesExtensions
+    public static class CoordinateExtensions
     {
 
         /**
