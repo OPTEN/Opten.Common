@@ -80,6 +80,23 @@ namespace Opten.Common.Extensions
             return denom <= 0 ? 1 : (a * d - b * c) / Math.Sqrt(denom);
         }
 
+        /**
+        * Returns tan(latitude-at-lng3) on the great circle (lat1, lng1) to (lat2, lng2). lng1==0.
+        * See http://williams.best.vwh.net/avform.htm .
+        */
+        public static double TanLatGeodesic(double lat1, double lat2, double lng2, double lng3)
+        {
+            return (Math.Tan(lat1) * Math.Sin(lng2 - lng3) + Math.Tan(lat2) * Math.Sin(lng3)) / Math.Sin(lng2);
+        }
+
+        /**
+        * Returns mercator(latitude-at-lng3) on the Rhumb line (lat1, lng1) to (lat2, lng2). lng1==0.
+        */
+        public static double MercatorLatRhumb(double lat1, double lat2, double lng2, double lng3)
+        {
+            return (Mercator(lat1) * (lng2 - lng3) + Mercator(lat2) * lng3) / lng2;
+        }
+
         /// Returns true if segment is on geodesic.
         public static bool IsOnSegmentGeodesic(double lat1, double lng1, double lat2, double lng2,
             double lat3, double lng3, double havTolerance)
