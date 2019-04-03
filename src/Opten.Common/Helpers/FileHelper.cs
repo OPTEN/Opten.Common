@@ -103,8 +103,19 @@ namespace Opten.Common.Helpers
 			fileName = fileName.Replace("ö", "oe");
 			fileName = fileName.Replace("ü", "ue");
 
-			if (fileName.EndsWith("_"))
-				fileName = fileName.Substring(0, fileName.Length - 1);
+            // there are invalid for zipping
+            fileName = fileName.Replace("’", string.Empty);
+            fileName = fileName.Replace("à", "a");
+            fileName = fileName.Replace("â", "a");
+            fileName = fileName.Replace("é", "e");
+            fileName = fileName.Replace("ê", "e");
+            fileName = fileName.Replace("è", "e");
+            fileName = fileName.Replace("î", "i");
+
+            if (fileName.EndsWith("_"))
+            {
+                fileName = fileName.Substring(0, fileName.Length - 1);
+            }
 
 			return fileName;
 		}
