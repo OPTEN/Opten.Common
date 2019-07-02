@@ -20,7 +20,7 @@ namespace Opten.Common.Helpers
 		/// <param name="date">The date.</param>
 		/// <param name="format">The date format.</param>
 		/// <returns></returns>
-		public static string GetFileNameWithDate(string fileName, string extension, DateTime date, string format = "yyyyMMdd_hhmmss")
+		public static string GetFileNameWithDate(string fileName, string extension, DateTime date, string format = "yyyyMMdd_HHmmss")
 		{
 			fileName = GetFileNameWithoutExtension(fileName: fileName); //TODO: Problem is when file like C.FREI AG the 'FREI AG' is meant as an extension :-/
 			fileName = RemoveInvalidCharactersFromFileName(fileName: fileName);
@@ -34,7 +34,7 @@ namespace Opten.Common.Helpers
 		/// <param name="date">The date.</param>
 		/// <param name="format">The date format.</param>
 		/// <returns></returns>
-		public static string GetFileNameWithDate(string fileName, DateTime date, string format = "yyyyMMdd_hhmmss")
+		public static string GetFileNameWithDate(string fileName, DateTime date, string format = "yyyyMMdd_HHmmss")
 		{
 			string extension = GetExtensionByFileName(fileName: fileName);
 			return GetFileNameWithDate(fileName: fileName, extension: extension, date: date, format: format);
